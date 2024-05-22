@@ -7,19 +7,11 @@ import (
 func main() {
 	var boardState BoardState = initializeBoard()
 
-	// TODO: Get these from user input
-	playerOne := Player{
-		id:     1,
-		name:   "Alice",
-		symbol: "x",
-		score:  0,
-	}
+	playerOne, playerTwo, err := getUserData()
 
-	playerTwo := Player{
-		id:     2,
-		name:   "Bob",
-		symbol: "o",
-		score:  0,
+	if err != nil {
+		fmt.Println("Incorrect input for player data")
+		return
 	}
 
 	printBoard(boardState, playerOne, playerTwo)
@@ -33,6 +25,38 @@ type Player struct {
 }
 
 type BoardState [9]uint8
+
+func getUserData() (Player, Player, error) {
+	playerOne := Player{
+		id:     1,
+		name:   "",
+		symbol: "x",
+		score:  0,
+	}
+
+	playerTwo := Player{
+		id:     2,
+		name:   "",
+		symbol: "o",
+		score:  0,
+	}
+
+	fmt.Println("Player 1 - What is your name?")
+	_, errPlayerOne := fmt.Scanln(&playerOne.name)
+
+	if errPlayerOne != nil {
+		return playerOne, playerTwo, errPlayerOne
+	}
+
+	fmt.Println("Player 2 - What is your name?")
+	_, errPlayerTwo := fmt.Scanln(&playerTwo.name)
+
+	if errPlayerTwo != nil {
+		return playerOne, playerTwo, errPlayerTwo
+	}
+
+	return playerOne, playerTwo, nil
+}
 
 func initializeBoard() BoardState {
 	return BoardState{0, 0, 0, 0, 0, 0, 0, 0, 0}
